@@ -6,10 +6,15 @@
 	objectVersion = 50;
 	objects = {
 
+/* Begin PBXFileReference section */
+		B36C4389216352C400B3E889 /* SMTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMTime.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
 /* Begin PBXGroup section */
 		B36C4382216352B100B3E889 = {
 			isa = PBXGroup;
 			children = (
+				B36C4389216352C400B3E889 /* SMTime.swift */,
 			);
 			sourceTree = "<group>";
 		};
