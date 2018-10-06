@@ -12,6 +12,8 @@ public struct SMDate {
 	
 	public static var today = SMDate(date: Date())
 	
+	
+	
 	// MARK: - Members
 	
 	public var year: Int
@@ -25,6 +27,8 @@ public struct SMDate {
 			day = max(min(day, 30), 0)
 		}
 	}
+	
+	
 	
 	// MARK: - Calculatable Members
 	
@@ -43,6 +47,11 @@ public struct SMDate {
 		return Int(date.timeIntervalSince1970)
 	}
 	
+	public var isToday: Bool {
+		return self == SMDate.today
+	}
+	
+	
 	
 	// MARK: - Initializations
 	
@@ -55,6 +64,15 @@ public struct SMDate {
 	
 	public init(timestamp: Int) {
 		self.init(date: Date(timeIntervalSince1970: TimeInterval(timestamp)))
+	}
+	
+	public init?(string: String, format: String) {
+		let formatter = DateFormatter()
+		formatter.dateFormat = format
+		guard let date = formatter.date(from: string) else {
+			return nil
+		}
+		self.init(date: date)
 	}
 	
 //	init(date: String) {
@@ -77,21 +95,23 @@ public struct SMDate {
 extension SMDate {
 	
 	public static func + (lhs: SMDate, rhs: SMDuration) -> SMDate {
-		let timestamp = lhs.timestamp + rhs.durationInSeconds
+		let timestamp = lhs.timestamp + rhs.totalSeconds
 		return SMDate(timestamp: timestamp)
 	}
 	
 	public static func + (lhs: SMDuration, rhs: SMDate) -> SMDate {
-		let timestamp = lhs.durationInSeconds + rhs.timestamp
+		let timestamp = lhs.totalSeconds + rhs.timestamp
 		return SMDate(timestamp: timestamp)
 	}
 
 	public static func - (lhs: SMDate, rhs: SMDuration) -> SMDate {
-		let timestamp = lhs.timestamp - rhs.durationInSeconds
+		let timestamp = lhs.timestamp - rhs.totalSeconds
 		return SMDate(timestamp: timestamp)
 	}
 	
 }
+
+
 
 // MARK: - Enums
 
@@ -109,6 +129,8 @@ extension SMDate {
 
 }
 
+
+
 // MARK: - Equatable & Comparable Protocols
 
 extension SMDate: Equatable, Comparable {
@@ -124,6 +146,8 @@ extension SMDate: Equatable, Comparable {
 	}
 	
 }
+
+
 
 // MARK: - Description Protocol
 

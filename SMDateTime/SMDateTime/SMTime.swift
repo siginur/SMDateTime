@@ -11,55 +11,66 @@ public struct SMTime: Codable {
 	
 	// MARK: - Static Members
 	
+	/// Current system time
 	public static var now: SMTime {
 		return SMTime(date: Date())
 	}
 
+	
+	
 	// MARK: - Members
 	
+	/// Hours. Range: `0...23`
 	public var hours: Int {
 		didSet {
 			hours = max(min(hours, 23), 0)
 		}
 	}
+	
+	/// Minutes. Range: `0...59`
 	public var minutes: Int {
 		didSet {
 			minutes = max(min(minutes, 59), 0)
 		}
 	}
+	
+	/// Seconds. Range: `0...59`
 	public var seconds:	Int {
 		didSet {
 			seconds = max(min(seconds, 59), 0)
 		}
 	}
 
+	
+	
 	// MARK: - Calculatable Members
 	
-	public var timeInSeconds: Int {
+	/// Time representation in seconds. Range: `0..<86400`
+	public var totalSeconds: Int {
 		return hours * 3600 + minutes * 60 + seconds
 	}
+	
+	
+	
 	
 	// MARK: - Initializations
 
 	/**
-	Constructor
-	
+	Constructor.
 	Create `SMTime` object by extracting `.hour`, `.minute` and `.second` components from the current `Calendar`
 	
 	- Parameter date: Date from where should extract time components
 	*/
 	public init(date: Date) {
-		let nowDate = Date()
 		let calendar = Calendar.current
-		self.hours = calendar.component(.hour, from: nowDate)
-		self.minutes = calendar.component(.minute, from: nowDate)
-		self.seconds = calendar.component(.second, from: nowDate)
+		self.hours = calendar.component(.hour, from: date)
+		self.minutes = calendar.component(.minute, from: date)
+		self.seconds = calendar.component(.second, from: date)
 	}
 	
 	
 	/**
-	Constructor
-	
+	Constructor.
 	Create `SMTime` object by `hour`, `minutes` and `seconds` values
 	
 	- Parameters:
@@ -78,9 +89,8 @@ public struct SMTime: Codable {
 	
 	
 	/**
-	Constructor
-	
-	Create `SMTime` object by `totalSeconds` of the time
+	Constructor.
+	Create `SMTime` object based on total number of seconds
 	
 	- Parameter totalSeconds: Time representation in seconds
 	
@@ -114,8 +124,7 @@ public struct SMTime: Codable {
 	
 	
 	/**
-	Constructor
-	
+	Constructor.
 	Create `SMTime` object by parsing specified `string` and `format`
 	
 	- Parameters:
@@ -125,28 +134,50 @@ public struct SMTime: Codable {
 	public init?(string: String, format: String) {
 		let formatter = DateFormatter()
 		formatter.dateFormat = format
-		guard let date = formatter.date(from: format) else {
+		guard let date = formatter.date(from: string) else {
 			return nil
 		}
 		self.init(date: date)
 	}
 	
+	
+	
+	
 	// MARK: - Static Functions
 	
+	/**
+	All input parameters would be converted to seconds and added to current time
+	
+	- Parameters:
+	  - hours:		Hours
+	  - minutes:	Minutes
+	  - seconds:	Seconds
+	- Returns: `SMTime` object represents time after added seconds
+	*/
 	public static func timeFromNow(hours: Int = 0, minutes: Int = 0, seconds: Int = 0) -> SMTime {
-		let totalSeconds: Int = now.timeInSeconds + hours * 3600 + minutes * 60 + seconds
+		let totalSeconds: Int = now.totalSeconds + hours * 3600 + minutes * 60 + seconds
 		return SMTime(totalSeconds: totalSeconds)
 	}
 	
+	
+	
 	// MARK: - Functions
 	
-	public func string(clock: ClockType = .system, includeSeconds: Bool = true) -> String {
+	/**
+	Generate nice `String`
+	
+	- Parameters:
+		- clock:			`ClockType` that represent 24 or 12 hours clock
+		- includeSeconds:	If `true`, add `seconds` to result string
+	- Returns: Nice `String` generated from object data
+	*/
+	public func string(clock: ClockType, includeSeconds: Bool = true) -> String {
 		let hoursStr, suffix: String
 
-		if clock == .hours_24 || (clock == .system && SMTime.systemClockType == .hours_24) {
+		if clock == .hours_24 {
 			hoursStr = SMTime.numberFormatter.string(for: hours) ?? "\(hours)"
 			suffix = ""
-		} else if hours > 12 {
+		} else if hours >= 12 {
 			hoursStr = SMTime.numberFormatter.string(for: hours - 12) ?? "\(hours - 12)"
 			suffix = " pm"
 		} else {
@@ -156,39 +187,12 @@ public struct SMTime: Codable {
 		let minutesStr = SMTime.numberFormatter.string(for: minutes) ?? "\(minutes)"
 		let secondsStr = SMTime.numberFormatter.string(for: seconds) ?? "\(seconds)"
 
-		return "\(hoursStr):\(minutesStr):\(secondsStr)" + suffix
+		return "\(hoursStr):\(minutesStr)" + (includeSeconds ? ":\(secondsStr)" : "") + suffix
 	}
 	
-//	public func timeInMinutes(roundType: RoundType = .automatic) -> Int {
-//		let minutesValue = timeInMinutes() as Double
-//
-//		switch roundType {
-//		case .up:
-//			return Int(ceil(minutesValue))
-//		case .down:
-//			return Int(floor(minutesValue))
-//		case .automatic:
-//			return Int(minutesValue)
-//		}
-//	}
-//
-//	public func timeInMinutes() -> Double {
-//		return Double(timeInSeconds) / 60.0
-//	}
-	
-//	public init(timeInHours: String) {
-//		let timeStr = timeInHours.filter({ "0123456789:".contains($0) })
-//		let timeParts = timeStr.split(separator: ":")
-//		guard timeParts.count == 2 else {
-//			hours = 0
-//			minutes = 0
-//			return
-//		}
-//		hours = Int(timeParts[0]) ?? 0
-//		minutes = Int(timeParts[1]) ?? 0
-//	}
-	
 }
+
+
 
 // MARK: - Private
 
@@ -202,53 +206,85 @@ extension SMTime {
 		return f
 	}()
 	
-	private static let systemClockType: ClockType = {
-		guard let dateFormat = DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: Locale.current) else {
-			return .hours_24
-		}
-		return dateFormat.index( of: "a") == nil ? ClockType.hours_24 : ClockType.hours_12
-	}()
-	
 }
+
+
 
 // MARK: - Mathematic Operations
 
 extension SMDuration {
 	
 	public static func + (lhs: SMTime, rhs: SMDuration) -> SMTime {
-		let seconds = lhs.timeInSeconds + rhs.durationInSeconds
+		let seconds = lhs.totalSeconds + rhs.totalSeconds
 		return SMTime(totalSeconds: seconds)
 	}
+	
 	
 	public static func + (lhs: SMDuration, rhs: SMTime) -> SMTime {
-		let seconds = lhs.durationInSeconds + rhs.timeInSeconds
+		let seconds = lhs.totalSeconds + rhs.totalSeconds
 		return SMTime(totalSeconds: seconds)
 	}
 	
+	
+	public static func += (lhs: inout SMTime, rhs: SMDuration) {
+		let seconds = lhs.totalSeconds + rhs.totalSeconds
+		lhs = SMTime(totalSeconds: seconds)
+	}
+	
+	
 	public static func - (lhs: SMTime, rhs: SMDuration) -> SMTime {
-		let seconds = lhs.timeInSeconds - rhs.durationInSeconds
+		let seconds = lhs.totalSeconds - rhs.totalSeconds
 		return SMTime(totalSeconds: seconds)
 	}
 	
 }
+
+
 
 // MARK: - Enums
 
 extension SMTime {
 	
+	/**
+	Round type
+	- up:			Always round value up
+	- down:			Always round value down
+	- automatic:	Round value to nearest integer
+	*/
 	public enum RoundType {
+		/// Always round value up. Examples: (`3.01 -> 4`) and (`6.91 -> 7`)
 		case up
+		/// Always round value down. Examples: (`3.01 -> 3`) and (`6.91 -> 6`)
 		case down
+		/// Round value to nearest integer. Examples: (`3.01 -> 3`) and (`6.91 -> 7`)
 		case automatic
 	}
 	
+	
+	/**
+	Clock type
+	- hours_24:	The 24-hour clock (00:00 - 23:59)
+	- hours_12:	The 12-hour clock (am/pm)
+	- system:	Clock type that configured in system preferences
+	*/
 	public enum ClockType {
+		/// The 24-hour clock (00:00 - 23:59)
 		case hours_24
+		/// The 12-hour clock (am/pm)
 		case hours_12
-		case system
+		
+		/// Clock type that configured in system preferences
+		public static let system: ClockType = {
+			guard let dateFormat = DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: Locale.current) else {
+				return .hours_24
+			}
+			return dateFormat.index( of: "a") == nil ? .hours_24 : .hours_12
+		}()
 	}
 	
 }
+
+
 
 // MARK: - Equatable & Comparable Protocols
 
@@ -265,6 +301,8 @@ extension SMTime: Equatable, Comparable {
 	}
 	
 }
+
+
 
 // MARK: - Description Protocol
 

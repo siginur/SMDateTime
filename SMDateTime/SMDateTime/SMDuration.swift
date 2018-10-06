@@ -12,37 +12,77 @@ public struct SMDuration: Codable {
 	
 	public static let zero = SMDuration(totalSeconds: 0)
 	
+
+	
 	// MARK: - Members
 	
+	/// Days. Greater than `0`
 	public var days: Int
+	
+	/// Hours. Range: `0...23`
 	public var hours: Int {
 		didSet {
 			hours = max(min(hours, 23), 0)
 		}
 	}
+	
+	/// Minutes. Range: `0...59`
 	public var minutes: Int {
 		didSet {
 			minutes = max(min(minutes, 59), 0)
 		}
 	}
+
+	/// Seconds. Range: `0...59`
 	public var seconds:	Int {
 		didSet {
 			seconds = max(min(seconds, 59), 0)
 		}
 	}
 	
+	
+	
 	// MARK: - Calculatable Members
 	
-	public var durationInSeconds: Int {
+	/// Duration in days. This value always possible
+	public var totalDays: Double {
+		return Double(totalSeconds) / 86400.0
+	}
+	
+	/// Duration in hours. This value always possible
+	public var totalHours: Double {
+		return Double(totalSeconds) / 3600.0
+	}
+	
+	/// Duration in minutes. This value always possible
+	public var totalMinutes: Double {
+		return Double(totalSeconds) / 60.0
+	}
+	
+	/// Duration in seconds. This value always possible
+	public var totalSeconds: Int {
 		return days * 86400 + hours * 3600 + minutes * 60 + seconds
 	}
 	
-//	var durationInMinutes: Int {
-//		return hours * 60 + minutes
-//	}
+	
+	
 
 	// MARK: - Initializations
 	
+	/**
+	Constructor.
+	Create `SMDuration` object by `days`, `hours`, `minutes` and `seconds` values
+	
+	- Parameters:
+		- days:		Duration hours. `default` is `0`
+		- hours:	Duration hours. `default` is `0`
+		- minutes:	Duration minutes. `default` value is `0`
+		- seconds:	Duration seconds. `default` value is `0`
+		- Requires: `days >= 0`
+		- Requires: `hours >= 0. hours <= 23`
+		- Requires: `minutes >= 0. minutes <= 59`
+		- Requires: `seconds >= 0. seconds <= 59`
+	*/
 	public init(days: Int = 0, hours: Int = 0, minutes: Int = 0, seconds: Int = 0) {
 		self.days = max(days, 0)
 		self.hours = max(min(hours, 23), 0)
@@ -50,13 +90,54 @@ public struct SMDuration: Codable {
 		self.seconds = max(min(seconds, 59), 0)
 	}
 	
-//	public init(durationInHours: String) {
-//		let timeStr = durationInHours.filter({ "0123456789.".contains($0) }).trimmingCharacters(in: CharacterSet.init(charactersIn: "."))
-//		let value: Double = (Double(timeStr) ?? 0)
-//		hours = Int(floor(value))
-//		minutes = Int(round((value - Double(hours)) * 60))
-//	}
 	
+	/**
+	Constructor.
+	Create `SMDuration` object based on total number of days
+	
+	- Parameter totalDays: Duration in days
+	
+	- Requires: `totalDays >= 0`
+	*/
+	public init(totalDays: Double) {
+		self.init(totalMinutes: totalDays * 1440) // 1440 is number of minutes in day
+	}
+	
+	
+	/**
+	Constructor.
+	Create `SMDuration` object based on total number of hours
+	
+	- Parameter totalHours: Duration in hours
+	
+	- Requires: `totalHours >= 0`
+	*/
+	public init(totalHours: Double) {
+		self.init(totalMinutes: totalHours * 60)
+	}
+	
+	
+	/**
+	Constructor.
+	Create `SMDuration` object based on total number of minutes
+	
+	- Parameter totalMinutes: Duration in minutes
+	
+	- Requires: `totalMinutes >= 0`
+	*/
+	public init(totalMinutes: Double) {
+		self.init(totalSeconds: Int(floor(totalMinutes * 60)))
+	}
+
+	
+	/**
+	Constructor.
+	Create `SMDuration` object based on total number of seconds
+	
+	- Parameter totalSeconds: Duration in seconds
+	
+	- Requires: `totalSeconds >= 0`
+	*/
 	public init(totalSeconds: Int) {
 		var durationInSeconds = abs(totalSeconds)
 		
@@ -70,38 +151,60 @@ public struct SMDuration: Codable {
 		seconds = durationInSeconds - minutes * 60
 	}
 	
+	
+	/**
+	Constructor
+	Create `SMDuration` object based on time interval between `startTime` and `finishTime`
+	*/
 	public init(startTime: SMTime, finishTime: SMTime) {
-		let timeInSeconds = finishTime.timeInSeconds - startTime.timeInSeconds
+		let timeInSeconds = finishTime.totalSeconds - startTime.totalSeconds
 		self.init(totalSeconds: timeInSeconds)
 	}
 	
 }
+
+
 
 // MARK: - Mathematic Operations
 
 extension SMDuration {
 	
 	public static func + (lhs: SMDuration, rhs: SMDuration) -> SMDuration {
-		let seconds = lhs.durationInSeconds + rhs.durationInSeconds
+		let seconds = lhs.totalSeconds + rhs.totalSeconds
 		return SMDuration(totalSeconds: seconds)
 	}
+	
 	
 	public static func - (lhs: SMDuration, rhs: SMDuration) -> SMDuration {
-		let seconds = lhs.durationInSeconds - rhs.durationInSeconds
+		let seconds = lhs.totalSeconds - rhs.totalSeconds
 		return SMDuration(totalSeconds: seconds)
 	}
+	
 	
 	public static func / (lhs: SMDuration, rhs: Int) -> SMDuration {
-		let seconds = devideAndRound(value: lhs.durationInSeconds, devider: rhs)
+		let seconds = devideAndRound(value: lhs.totalSeconds, devider: rhs)
 		return SMDuration(totalSeconds: seconds)
 	}
 	
+	
 	public static func * (lhs: SMDuration, rhs: Int) -> SMDuration {
-		let seconds = lhs.durationInSeconds * rhs
+		let seconds = lhs.totalSeconds * rhs
 		return SMDuration(totalSeconds: seconds)
+	}
+	
+	
+	public static func += (lhs: inout SMDuration, rhs: SMDuration) {
+		lhs = lhs + rhs;
+	}
+	
+	
+	public static func -= (lhs: inout SMDuration, rhs: SMDuration) {
+		lhs = lhs - rhs;
 	}
 	
 }
+
+
 
 // MARK: - Equatable & Comparable Protocols
 
@@ -120,6 +223,8 @@ extension SMDuration: Equatable, Comparable {
 	}
 	
 }
+
+
 
 // MARK: - Description Protocol
 
