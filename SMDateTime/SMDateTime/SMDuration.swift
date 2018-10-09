@@ -6,10 +6,14 @@
 //  Copyright © 2018 merkova. All rights reserved.
 //
 
+/**
+Duration structure
+*/
 public struct SMDuration: Codable {
 	
 	// MARK: - Static Members
 	
+	/// Zero duration.
 	public static let zero = SMDuration(totalSeconds: 0)
 	
 
@@ -71,17 +75,17 @@ public struct SMDuration: Codable {
 	
 	/**
 	Constructor.
-	Create `SMDuration` object by `days`, `hours`, `minutes` and `seconds` values
+	Create `SMDuration` object based on `days`, `hours`, `minutes` and `seconds` values
 	
 	- Parameters:
 		- days:		Duration hours. `default` is `0`
 		- hours:	Duration hours. `default` is `0`
 		- minutes:	Duration minutes. `default` value is `0`
 		- seconds:	Duration seconds. `default` value is `0`
-		- Requires: `days >= 0`
-		- Requires: `hours >= 0. hours <= 23`
-		- Requires: `minutes >= 0. minutes <= 59`
-		- Requires: `seconds >= 0. seconds <= 59`
+	- Requires: `days >= 0`
+	- Requires: `hours >= 0. hours <= 23`
+	- Requires: `minutes >= 0. minutes <= 59`
+	- Requires: `seconds >= 0. seconds <= 59`
 	*/
 	public init(days: Int = 0, hours: Int = 0, minutes: Int = 0, seconds: Int = 0) {
 		self.days = max(days, 0)
@@ -155,6 +159,10 @@ public struct SMDuration: Codable {
 	/**
 	Constructor
 	Create `SMDuration` object based on time interval between `startTime` and `finishTime`
+	
+	- Parameters:
+		- startTime:	Start time
+		- finishTime:	Finish time
 	*/
 	public init(startTime: SMTime, finishTime: SMTime) {
 		let timeInSeconds = finishTime.totalSeconds - startTime.totalSeconds
@@ -169,35 +177,89 @@ public struct SMDuration: Codable {
 
 extension SMDuration {
 	
+	/**
+	'Plus' mathematic operator.
+	
+	- Parameters:
+		- lhs:	First duration
+		- rhs:	Second duration
+	
+	- Returns:
+		Sum of both durations
+	*/
 	public static func + (lhs: SMDuration, rhs: SMDuration) -> SMDuration {
 		let seconds = lhs.totalSeconds + rhs.totalSeconds
 		return SMDuration(totalSeconds: seconds)
 	}
 	
 	
+	/**
+	'Minus' mathematic operator.
+	
+	- Parameters:
+		- lhs:	First duration
+		- rhs:	Second duration
+	
+	- Returns:
+		Difference between two durations
+	*/
 	public static func - (lhs: SMDuration, rhs: SMDuration) -> SMDuration {
 		let seconds = lhs.totalSeconds - rhs.totalSeconds
 		return SMDuration(totalSeconds: seconds)
 	}
 	
 	
+	/**
+	'Division' mathematic operator.
+	
+	- Parameters:
+		- lhs:	Source duration
+		- rhs:	Divider
+	
+	- Returns:
+		Quotient
+	*/
 	public static func / (lhs: SMDuration, rhs: Int) -> SMDuration {
 		let seconds = devideAndRound(value: lhs.totalSeconds, devider: rhs)
 		return SMDuration(totalSeconds: seconds)
 	}
 	
 	
+	/**
+	'Multiplication' mathematic operator.
+	
+	- Parameters:
+		- lhs:	Source duration
+		- rhs:	Factor
+	
+	- Returns:
+		Quotient.
+	*/
 	public static func * (lhs: SMDuration, rhs: Int) -> SMDuration {
 		let seconds = lhs.totalSeconds * rhs
 		return SMDuration(totalSeconds: seconds)
 	}
 	
 	
+	/**
+	'Plus' mathematic operator.
+	
+	- Parameters:
+		- lhs:	Source duration
+		- rhs:	Duration that would be added
+	*/
 	public static func += (lhs: inout SMDuration, rhs: SMDuration) {
 		lhs = lhs + rhs;
 	}
 	
 	
+	/**
+	'Minus' mathematic operator.
+	
+	- Parameters:
+		- lhs:	Source duration
+		- rhs:	Duration that would be subtracted
+	*/
 	public static func -= (lhs: inout SMDuration, rhs: SMDuration) {
 		lhs = lhs - rhs;
 	}

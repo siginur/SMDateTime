@@ -7,6 +7,9 @@
 //
 
 
+/**
+Time structure
+*/
 public struct SMTime: Codable {
 	
 	// MARK: - Static Members
@@ -57,7 +60,7 @@ public struct SMTime: Codable {
 
 	/**
 	Constructor.
-	Create `SMTime` object by extracting `.hour`, `.minute` and `.second` components from the current `Calendar`
+	Create `SMTime` object based on extracted `.hour`, `.minute` and `.second` components from the current `Calendar`
 	
 	- Parameter date: Date from where should extract time components
 	*/
@@ -71,7 +74,7 @@ public struct SMTime: Codable {
 	
 	/**
 	Constructor.
-	Create `SMTime` object by `hour`, `minutes` and `seconds` values
+	Create `SMTime` object based on `hour`, `minutes` and `seconds` values
 	
 	- Parameters:
 		- hours:	Time hours. `default` is `0`
@@ -125,7 +128,7 @@ public struct SMTime: Codable {
 	
 	/**
 	Constructor.
-	Create `SMTime` object by parsing specified `string` and `format`
+	Create `SMTime` object based on parsed specified string and format
 	
 	- Parameters:
 		- string: Source string that should be parsed by specified `format` in next parameter
@@ -164,12 +167,12 @@ public struct SMTime: Codable {
 	// MARK: - Functions
 	
 	/**
-	Generate nice `String`
+	Generate readable `String` from members
 	
 	- Parameters:
 		- clock:			`ClockType` that represent 24 or 12 hours clock
 		- includeSeconds:	If `true`, add `seconds` to result string
-	- Returns: Nice `String` generated from object data
+	- Returns: Readable `String` generated from members
 	*/
 	public func string(clock: ClockType, includeSeconds: Bool = true) -> String {
 		let hoursStr, suffix: String
@@ -214,24 +217,61 @@ extension SMTime {
 
 extension SMDuration {
 	
+	/**
+	'Plus' mathematic operator.
+	
+	- Parameters:
+		- lhs:	Started time
+		- rhs:	Duration that would be added to time
+	
+	- Returns:
+		Time with added duration
+	*/
 	public static func + (lhs: SMTime, rhs: SMDuration) -> SMTime {
 		let seconds = lhs.totalSeconds + rhs.totalSeconds
 		return SMTime(totalSeconds: seconds)
 	}
 	
 	
+	/**
+	'Plus' mathematic operator.
+	
+	- Parameters:
+		- lhs:	Duration that would be added to time
+		- rhs:	Started time
+	
+	- Returns:
+		Time with added duration
+	*/
 	public static func + (lhs: SMDuration, rhs: SMTime) -> SMTime {
 		let seconds = lhs.totalSeconds + rhs.totalSeconds
 		return SMTime(totalSeconds: seconds)
 	}
 	
 	
+	/**
+	'Plus' mathematic operator.
+	
+	- Parameters:
+		- lhs:	Source time
+		- rhs:	Duration that would be added
+	*/
 	public static func += (lhs: inout SMTime, rhs: SMDuration) {
 		let seconds = lhs.totalSeconds + rhs.totalSeconds
 		lhs = SMTime(totalSeconds: seconds)
 	}
 	
 	
+	/**
+	'Minus' mathematic operator.
+	
+	- Parameters:
+		- lhs:	Source time
+		- rhs:	Duration that would be subtracted
+	
+	- Returns:
+		Time with subtracted duration
+	*/
 	public static func - (lhs: SMTime, rhs: SMDuration) -> SMTime {
 		let seconds = lhs.totalSeconds - rhs.totalSeconds
 		return SMTime(totalSeconds: seconds)
@@ -246,10 +286,7 @@ extension SMDuration {
 extension SMTime {
 	
 	/**
-	Round type
-	- up:			Always round value up
-	- down:			Always round value down
-	- automatic:	Round value to nearest integer
+	Round type. Describes how to round double values to integers
 	*/
 	public enum RoundType {
 		/// Always round value up. Examples: (`3.01 -> 4`) and (`6.91 -> 7`)
@@ -262,10 +299,7 @@ extension SMTime {
 	
 	
 	/**
-	Clock type
-	- hours_24:	The 24-hour clock (00:00 - 23:59)
-	- hours_12:	The 12-hour clock (am/pm)
-	- system:	Clock type that configured in system preferences
+	Clock type. Can be 12 or 24 clock type. Also contain help static values
 	*/
 	public enum ClockType {
 		/// The 24-hour clock (00:00 - 23:59)
@@ -289,7 +323,7 @@ extension SMTime {
 // MARK: - Equatable & Comparable Protocols
 
 extension SMTime: Equatable, Comparable {
-	
+
 	public static func < (lhs: SMTime, rhs: SMTime) -> Bool {
 		if lhs.hours != rhs.hours {
 			return lhs.hours < rhs.hours
@@ -308,6 +342,7 @@ extension SMTime: Equatable, Comparable {
 
 extension SMTime: CustomStringConvertible {
 	
+	/// String description of the `SMTime`
 	public var description: String {
 		return "\(hours):\(minutes):\(seconds)"
 	}
