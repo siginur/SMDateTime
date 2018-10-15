@@ -1,0 +1,243 @@
+//
+//  SMDateTime.swift
+//  SMDateTime
+//
+//  Created by Alexey Siginur on 10/10/2018.
+//  Copyright © 2018 merkova. All rights reserved.
+//
+
+
+/**
+DateTime structure
+*/
+public struct SMDateTime: Codable {
+	
+	// MARK: - Private Members
+	
+	private var _date: SMDate
+	private var _time: SMTime
+	
+	
+	
+	// MARK: - Static Members
+	
+	/// Current system date and time
+	public static var now: SMDateTime {
+		return SMDateTime(date: Date())
+	}
+
+	
+	
+	// MARK: - Members
+	
+	/// Hours. Greater than `0`
+	public var year: Int {
+		get {
+			return _date.year
+		}
+		set {
+			_date.year = newValue
+		}
+	}
+	
+	/// Month. Range: `0...11`
+	public var month: Int {
+		get {
+			return _date.month
+		}
+		set {
+			_date.month = newValue
+		}
+	}
+	
+	/// Month. Range: `1...31`
+	public var day: Int {
+		get {
+			return _date.day
+		}
+		set {
+			_date.day = newValue
+		}
+	}
+	
+	/// Hours. Range: `0...23`
+	public var hours: Int {
+		get {
+			return _time.hours
+		}
+		set {
+			_time.hours = newValue
+		}
+	}
+	
+	/// Minutes. Range: `0...59`
+	public var minutes: Int {
+		get {
+			return _time.minutes
+		}
+		set {
+			_time.minutes = newValue
+		}
+	}
+	
+	/// Seconds. Range: `0...59`
+	public var seconds:	Int {
+		get {
+			return _time.seconds
+		}
+		set {
+			_time.seconds = newValue
+		}
+	}
+	
+	
+	
+	// MARK: - Calculatable Members
+	
+	/// `Weekday` of the date
+	public var weekday: SMDate.Weekday! {
+		return _date.weekday
+	}
+	
+	/// `Date` object
+	public var date: Date! {
+		let calendar = Calendar.current
+		let components = DateComponents(calendar: calendar, year: year, month: month, day: day, hour: hours, minute: minutes, second: seconds)
+		return calendar.date(from: components)
+	}
+	
+	/// Unix Timestamp in seconds
+	public var timestamp: Int {
+		return Int(date.timeIntervalSince1970)
+	}
+	
+	/// Check if self date is yesturday
+	public var isYesturday: Bool {
+		return _date.isYesturday
+	}
+	
+	/// Check if self date is today
+	public var isToday: Bool {
+		return _date.isToday
+	}
+	
+	/// Check if self date is tomorrow
+	public var isTomorrow: Bool {
+		return _date.isTomorrow
+	}
+	
+	
+	
+	// MARK: - Initializations
+	
+	/**
+	Constructor.
+	Create `SMDateTime` structure based on extracted `.day`, `.month`, `.year`, `hour`, `minute` and `second` components from the current `Calendar`
+	
+	- Parameter date: `Date` object
+	*/
+	public init(date: Date) {
+		_date = SMDate(date: date)
+		_time = SMTime(date: date)
+	}
+	
+	
+	/**
+	Constructor.
+	Create `SMDateTime` object based on timestamp
+	
+	- Parameter timestamp: Unix Timestamp in seconds
+	*/
+	public init(timestamp: Int) {
+		self.init(date: Date(timeIntervalSince1970: TimeInterval(timestamp)))
+	}
+	
+	
+	/**
+	Constructor.
+	Create `SMDateTime` object based on `.day`, `.month`, `.year`, `hour`, `minute` and `second` values
+	
+	- Parameters:
+		- year:		Date year.
+		- month:	Date month.
+		- day:		Date day.
+		- hours:	Time hours. `default` is `0`
+		- minutes:	Time minutes. `default` value is `0`
+		- seconds:	Time seconds. `default` value is `0`
+	- Requires: `year >= 0`
+	- Requires: `month >= 0. month <= 11`
+	- Requires: `day >= 1. day <= 31`
+	- Requires: `hours >= 0. hours <= 23`
+	- Requires: `minutes >= 0. minutes <= 59`
+	- Requires: `seconds >= 0. seconds <= 59`
+	*/
+	public init(year: Int, month: Int, day: Int, hours: Int = 0, minutes: Int = 0, seconds: Int = 0) {
+		_date = SMDate(year: year, month: month, day: day)
+		_time = SMTime(hours: hours, minutes: minutes, seconds: seconds)
+	}
+	
+	
+	/**
+	Constructor.
+	Create `SMDateTime` object based on parsed specified string and format
+	
+	- Parameters:
+		- string: Source string that should be parsed by specified `format` in next parameter
+		- format: Format of the date ('DateFormatter')
+	*/
+	public init?(string: String, format: String) {
+		let formatter = DateFormatter()
+		formatter.dateFormat = format
+		guard let date = formatter.date(from: string) else {
+			return nil
+		}
+		self.init(date: date)
+	}
+	
+	
+	
+	// MARK: - Functions
+	
+	/**
+	Generate readable `String` from members
+	
+	- Parameters:
+	- format:	Date format to represent date
+	- labels:	One or more `StringLabel` that can be used for more readable result
+	- Returns: Readable `String` generated from members
+	*/
+	public func string(format: String, labels: SMDate.StringLabel = []) -> String {
+		let formatter = DateFormatter()
+		formatter.dateFormat = format
+		return formatter.string(from: date)
+	}
+	
+}
+
+
+
+// MARK: - Equatable & Comparable Protocols
+
+extension SMDateTime: Equatable, Comparable {
+	
+	public static func < (lhs: SMDateTime, rhs: SMDateTime) -> Bool {
+		if lhs._date != rhs._date {
+			return lhs._date < rhs._date
+		} else {
+			return lhs._time < rhs._time
+		}
+	}
+	
+}
+
+
+
+// MARK: - Description Protocol
+
+extension SMDateTime: CustomStringConvertible {
+	
+	public var description: String {
+		return "\(_date) \(_time)"
+	}
+	
+}

@@ -115,6 +115,25 @@ public struct SMDate: Codable {
 	
 	/**
 	Constructor.
+	Create `SMDate` object based on `.day`, `.month` and `.year` values
+	
+	- Parameters:
+		- year:		Date year.
+		- month:	Date month.
+		- day:		Date day.
+	- Requires: `year >= 0`
+	- Requires: `month >= 0. month <= 11`
+	- Requires: `day >= 1. day <= 31`
+	*/
+	public init(year: Int, month: Int, day: Int) {
+		self.year = year
+		self.month = month
+		self.day = day
+	}
+	
+	
+	/**
+	Constructor.
 	Create `SMDate` object based on parsed specified string and format
 	
 	- Parameters:

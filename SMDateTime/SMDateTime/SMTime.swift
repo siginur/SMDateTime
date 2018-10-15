@@ -145,7 +145,6 @@ public struct SMTime: Codable {
 	
 	
 	
-	
 	// MARK: - Static Functions
 	
 	/**
