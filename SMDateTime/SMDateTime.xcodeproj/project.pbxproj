@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B342C09F216D50D700282BDC /* SMDateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B342C09E216D50D700282BDC /* SMDateTime.swift */; };
 		B36C439E2163550400B3E889 /* SMDateTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B36C43942163550400B3E889 /* SMDateTime.framework */; };
 		B36C43A32163550400B3E889 /* SMDateTimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36C43A22163550400B3E889 /* SMDateTimeTests.swift */; };
 		B36C43A52163550400B3E889 /* SMDateTime.h in Headers */ = {isa = PBXBuildFile; fileRef = B36C43972163550400B3E889 /* SMDateTime.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -27,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B342C09E216D50D700282BDC /* SMDateTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMDateTime.swift; sourceTree = "<group>"; };
 		B36C43942163550400B3E889 /* SMDateTime.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SMDateTime.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B36C43972163550400B3E889 /* SMDateTime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SMDateTime.h; sourceTree = "<group>"; };
 		B36C43982163550400B3E889 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 				B36C43AE2163554500B3E889 /* SMTime.swift */,
 				B36C43B021636A7800B3E889 /* SMDuration.swift */,
 				B36C43B42163798800B3E889 /* SMDate.swift */,
+				B342C09E216D50D700282BDC /* SMDateTime.swift */,
 				B36C43B221636DF400B3E889 /* Utils.swift */,
 			);
 			path = SMDateTime;
@@ -210,6 +213,7 @@
 				B36C43AF2163554500B3E889 /* SMTime.swift in Sources */,
 				B36C43B52163798800B3E889 /* SMDate.swift in Sources */,
 				B36C43B121636A7800B3E889 /* SMDuration.swift in Sources */,
+				B342C09F216D50D700282BDC /* SMDateTime.swift in Sources */,
 				B36C43B321636DF400B3E889 /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
