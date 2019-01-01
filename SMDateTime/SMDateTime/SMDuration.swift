@@ -6,6 +6,7 @@
 //  Copyright © 2018 merkova. All rights reserved.
 //
 
+
 /**
 Duration structure
 */

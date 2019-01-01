@@ -77,9 +77,9 @@ public struct SMTime: Codable {
 	Create `SMTime` object based on `hour`, `minutes` and `seconds` values
 	
 	- Parameters:
-		- hours:	Time hours. `default` is `0`
-		- minutes:	Time minutes. `default` value is `0`
-		- seconds:	Time seconds. `default` value is `0`
+		- hours:	Time hours. Default value is `0`
+		- minutes:	Time minutes. Default value is `0`
+		- seconds:	Time seconds. Default value is `0`
 	- Requires: `hours >= 0. hours <= 23`
 	- Requires: `minutes >= 0. minutes <= 59`
 	- Requires: `seconds >= 0. seconds <= 59`
@@ -151,9 +151,9 @@ public struct SMTime: Codable {
 	All input parameters would be converted to seconds and added to current time
 	
 	- Parameters:
-	  - hours:		Hours
-	  - minutes:	Minutes
-	  - seconds:	Seconds
+	  - hours:		Hours. Default value is `0`
+	  - minutes:	Minutes. Default value is `0`
+	  - seconds:	Seconds. Default value is `0`
 	- Returns: `SMTime` object represents time after added seconds
 	*/
 	public static func timeFromNow(hours: Int = 0, minutes: Int = 0, seconds: Int = 0) -> SMTime {
@@ -170,7 +170,7 @@ public struct SMTime: Codable {
 	
 	- Parameters:
 		- clock:			`ClockType` that represent 24 or 12 hours clock
-		- includeSeconds:	If `true`, add `seconds` to result string
+		- includeSeconds:	If `true`, add `seconds` to result string. Default value is `0`
 	- Returns: Readable `String` generated from members
 	*/
 	public func string(clock: ClockType, includeSeconds: Bool = true) -> String {
