@@ -12,6 +12,22 @@ Duration structure
 */
 public struct SMDuration: Codable {
 	
+	// MARK: - Enums
+	
+	/**
+	Time unit. Describes availables unit of times
+	*/
+	public enum TimeUnit {
+		/// Day unit
+		case day
+		/// Hour unit
+		case hour
+		/// Minute unit
+		case minute
+	}
+	
+	
+	
 	// MARK: - Static Members
 	
 	/// Zero duration.
@@ -169,6 +185,16 @@ public struct SMDuration: Codable {
 		let timeInSeconds = finishTime.totalSeconds - startTime.totalSeconds
 		self.init(totalSeconds: timeInSeconds)
 	}
+	
+	
+//	public func round(to: int, unit: TimeUnit) {
+//		
+//	}
+//	
+//	
+//	public func rounded() -> SMDuration {
+//		return self
+//	}
 	
 }
 
