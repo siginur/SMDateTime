@@ -18,12 +18,14 @@ public struct SMDuration: Codable {
 	Time unit. Describes availables unit of times
 	*/
 	public enum TimeUnit {
-		/// Day unit
+		/// Days unit
 		case day
-		/// Hour unit
+		/// Hours unit
 		case hour
-		/// Minute unit
+		/// Minutes unit
 		case minute
+		/// Seconds unit
+		case second
 	}
 	
 	
@@ -187,14 +189,44 @@ public struct SMDuration: Codable {
 	}
 	
 	
-//	public func round(to: int, unit: TimeUnit) {
-//		
-//	}
-//	
-//	
-//	public func rounded() -> SMDuration {
-//		return self
-//	}
+	
+	// MARK: - Functions
+	
+	/**
+	Round current duration to specific `unit` and return new value
+	
+	- Parameters:
+	- toUnit:	`TimeUnit` that should be rounded
+	- Returns:	New `SMDuration` created by rounding current duration
+	*/
+	public func rounded(toUnit unit: TimeUnit) -> SMDuration {
+		var days = self.days
+		var hours = self.hours
+		var minutes = self.minutes
+		var seconds = self.seconds
+
+		switch unit {
+		case .day:
+			minutes += seconds >= 30 ? 1 : 0
+			hours += minutes >= 30 ? 1 : 0
+			days += hours >= 12 ? 1 : 0
+			seconds = 0
+			minutes = 0
+			hours = 0
+		case .hour:
+			minutes += seconds >= 30 ? 1 : 0
+			hours += minutes >= 30 ? 1 : 0
+			seconds = 0
+			minutes = 0
+		case .minute:
+			minutes += seconds >= 30 ? 1 : 0
+			seconds = 0
+		case .second:
+			break;
+		}
+		seconds += minutes * 60 + hours * 3600 + days * 86400
+		return SMDuration(totalSeconds: seconds)
+	}
 	
 }
 
@@ -320,7 +352,13 @@ extension SMDuration: Equatable, Comparable {
 extension SMDuration: CustomStringConvertible {
 	
 	public var description: String {
-		return "\(hours)h \(minutes)m"
+		var components: [String?] = []
+		components.append(days > 0 ? "\(days)d" : nil)
+		components.append(hours > 0 ? "\(hours)h" : nil)
+		components.append(minutes > 0 ? "\(minutes)m" : nil)
+		components.append(seconds > 0 ? "\(seconds)s" : nil)
+		let notNilComponents = components.compactMap{ $0 }
+		return notNilComponents.count == 0 ? "0s" : notNilComponents.joined(separator: " ")
 	}
 	
 }

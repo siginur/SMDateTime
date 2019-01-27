@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B300F49521FA4451000B091A /* SMDurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B300F49421FA4451000B091A /* SMDurationTests.swift */; };
 		B342C09F216D50D700282BDC /* SMDateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B342C09E216D50D700282BDC /* SMDateTime.swift */; };
 		B36C439E2163550400B3E889 /* SMDateTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B36C43942163550400B3E889 /* SMDateTime.framework */; };
 		B36C43A32163550400B3E889 /* SMDateTimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36C43A22163550400B3E889 /* SMDateTimeTests.swift */; };
@@ -28,6 +29,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B300F48821FA40A5000B091A /* SMDurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMDurationTests.swift; sourceTree = "<group>"; };
+		B300F48A21FA40A5000B091A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B300F49421FA4451000B091A /* SMDurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMDurationTests.swift; sourceTree = "<group>"; };
 		B342C09E216D50D700282BDC /* SMDateTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMDateTime.swift; sourceTree = "<group>"; };
 		B36C43942163550400B3E889 /* SMDateTime.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SMDateTime.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B36C43972163550400B3E889 /* SMDateTime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SMDateTime.h; sourceTree = "<group>"; };
@@ -60,11 +64,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B300F48721FA40A5000B091A /* SMDurationTests */ = {
+			isa = PBXGroup;
+			children = (
+				B300F48821FA40A5000B091A /* SMDurationTests.swift */,
+				B300F48A21FA40A5000B091A /* Info.plist */,
+			);
+			path = SMDurationTests;
+			sourceTree = "<group>";
+		};
 		B36C438A2163550400B3E889 = {
 			isa = PBXGroup;
 			children = (
 				B36C43962163550400B3E889 /* SMDateTime */,
 				B36C43A12163550400B3E889 /* SMDateTimeTests */,
+				B300F48721FA40A5000B091A /* SMDurationTests */,
 				B36C43952163550400B3E889 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -96,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				B36C43A22163550400B3E889 /* SMDateTimeTests.swift */,
+				B300F49421FA4451000B091A /* SMDurationTests.swift */,
 				B36C43A42163550400B3E889 /* Info.plist */,
 			);
 			path = SMDateTimeTests;
@@ -157,7 +172,7 @@
 		B36C438B2163550400B3E889 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1000;
+				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = merkova;
 				TargetAttributes = {
@@ -223,6 +238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B36C43A32163550400B3E889 /* SMDateTimeTests.swift in Sources */,
+				B300F49521FA4451000B091A /* SMDurationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
