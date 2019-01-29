@@ -25,7 +25,7 @@ class SMDurationTests: XCTestCase {
 				for minutes in 0...59 {
 					for seconds in 0...59 {
 						let duration = SMDuration(days: days, hours: hours, minutes: minutes, seconds: seconds)
-						XCTAssertEqual(duration, duration.rounded(toUnit: .second))
+						checkDuration(duration: duration, roundToUnit: .second, requiredDuration: duration)
 					}
 				}
 			}
@@ -38,16 +38,13 @@ class SMDurationTests: XCTestCase {
 				for minutes in 0...59 {
 					for seconds in 0...29 {
 						let duration = SMDuration(days: days, hours: hours, minutes: minutes, seconds: seconds)
-						let roundedDuration = duration.rounded(toUnit: .minute)
-						XCTAssertEqual(SMDuration(days: days, hours: hours, minutes: minutes), roundedDuration)
-						print(duration, "-", roundedDuration)
+						let requiredDuration = SMDuration(days: days, hours: hours, minutes: minutes)
+						checkDuration(duration: duration, roundToUnit: .minute, requiredDuration: requiredDuration)
 					}
 					for seconds in 30...59 {
 						let duration = SMDuration(days: days, hours: hours, minutes: minutes, seconds: seconds)
-						let roundedDuration = duration.rounded(toUnit: .minute)
 						let requiredDuration = SMDuration(totalSeconds: duration.totalSeconds - seconds + 60)
-						XCTAssertEqual(requiredDuration, roundedDuration)
-						print(duration, "-", roundedDuration)
+						checkDuration(duration: duration, roundToUnit: .minute, requiredDuration: requiredDuration)
 					}
 				}
 			}
@@ -60,86 +57,71 @@ class SMDurationTests: XCTestCase {
 				for minutes in 0...29 {
 					for seconds in 0...29 {
 						let duration = SMDuration(days: days, hours: hours, minutes: minutes, seconds: seconds)
-						let roundedDuration = duration.rounded(toUnit: .hour)
 						let requiredDuration = SMDuration(days: days, hours: hours)
-						XCTAssertEqual(requiredDuration, roundedDuration)
-						print(duration, "-", roundedDuration)
+						checkDuration(duration: duration, roundToUnit: .hour, requiredDuration: requiredDuration)
 					}
 					for seconds in 30...59 {
 						let duration = SMDuration(days: days, hours: hours, minutes: minutes, seconds: seconds)
-						let roundedDuration = duration.rounded(toUnit: .hour)
 						let requiredDuration = SMDuration(totalSeconds: days * 86400 + (hours + (minutes == 29 ? 1 : 0)) * 3600)
-						XCTAssertEqual(requiredDuration, roundedDuration)
-						print(duration, "-", roundedDuration)
+						checkDuration(duration: duration, roundToUnit: .hour, requiredDuration: requiredDuration)
 					}
 				}
 				for minutes in 30...59 {
 					for seconds in 0...59 {
 						let duration = SMDuration(days: days, hours: hours, minutes: minutes, seconds: seconds)
-						let roundedDuration = duration.rounded(toUnit: .hour)
 						let requiredDuration = SMDuration(totalSeconds: duration.totalSeconds - seconds - minutes * 60 + 3600)
-						XCTAssertEqual(requiredDuration, roundedDuration)
-						print(duration, "-", roundedDuration)
+						checkDuration(duration: duration, roundToUnit: .hour, requiredDuration: requiredDuration)
 					}
 				}
 			}
 		}
 	}
-
+	
 	func testRoundByDayUnit() {
-		for days in 0...0 {
+		for days in 0...1 {
 			for hours in 0...10 {
 				for minutes in 0...59 {
-					for seconds in 0...29 {
-						let duration = SMDuration(days: days, hours: hours, minutes: minutes, seconds: seconds)
-						let roundedDuration = duration.rounded(toUnit: .day)
-						let requiredDuration = SMDuration(days: days)
-						XCTAssertEqual(requiredDuration, roundedDuration)
-						print(duration, "-", roundedDuration)
-					}
-					for seconds in 30...59 {
-						let duration = SMDuration(days: days, hours: hours, minutes: minutes, seconds: seconds)
-						let roundedDuration = duration.rounded(toUnit: .day)
-						let requiredDuration = SMDuration(days: days + (hours == 11 && minutes >= 29 ? 1 : 0))
-						XCTAssertEqual(requiredDuration, roundedDuration)
-						print(duration, "-", roundedDuration)
+					for seconds in 0...59 {
+						checkDuration(days: days, hours: hours, minutes: minutes, seconds: seconds, roundToUnit: .day, requiredDuration: SMDuration(days: days))
 					}
 				}
 			}
-			
-			for hours in 12...23 {
-				for minutes in 0...29 {
+			for hours in 11...11 {
+				for minutes in 0...28 {
 					for seconds in 0...59 {
-						let duration = SMDuration(days: days, hours: hours, minutes: minutes, seconds: seconds)
-						let roundedDuration = duration.rounded(toUnit: .day)
-						let requiredDuration = SMDuration(days: days)
-						XCTAssertEqual(requiredDuration, roundedDuration)
-						print(duration, "-", roundedDuration)
+						checkDuration(days: days, hours: hours, minutes: minutes, seconds: seconds, roundToUnit: .day, requiredDuration: SMDuration(days: days))
+					}
+				}
+				for minutes in 29...29 {
+					for seconds in 0...59 {
+						checkDuration(days: days, hours: hours, minutes: minutes, seconds: seconds, roundToUnit: .day, requiredDuration: SMDuration(days: days + (seconds > 29 ? 1 : 0)))
 					}
 				}
 				for minutes in 30...59 {
 					for seconds in 0...59 {
-						let duration = SMDuration(days: days, hours: hours, minutes: minutes, seconds: seconds)
-						let roundedDuration = duration.rounded(toUnit: .day)
-						let requiredDuration = SMDuration(days: days + 1)
-						XCTAssertEqual(requiredDuration, roundedDuration)
-						print(duration, "-", roundedDuration)
+						checkDuration(days: days, hours: hours, minutes: minutes, seconds: seconds, roundToUnit: .day, requiredDuration: SMDuration(days: days + 1))
+					}
+				}
+			}
+			for hours in 12...23 {
+				for minutes in 0...59 {
+					for seconds in 0...59 {
+						checkDuration(days: days, hours: hours, minutes: minutes, seconds: seconds, roundToUnit: .day, requiredDuration: SMDuration(days: days + 1))
 					}
 				}
 			}
 		}
 	}
-
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
+	
+	fileprivate func checkDuration(days: Int, hours: Int, minutes: Int, seconds: Int, roundToUnit: SMDuration.TimeUnit, requiredDuration: SMDuration) {
+		let duration = SMDuration(days: days, hours: hours, minutes: minutes, seconds: seconds)
+		checkDuration(duration: duration, roundToUnit: roundToUnit, requiredDuration: requiredDuration)
+	}
+	
+	fileprivate func checkDuration(duration: SMDuration, roundToUnit: SMDuration.TimeUnit, requiredDuration: SMDuration) {
+		let roundedDuration = duration.rounded(toUnit: roundToUnit)
+		XCTAssertEqual(requiredDuration, roundedDuration)
+//		print(duration, "-", roundedDuration)
+	}
 
 }
