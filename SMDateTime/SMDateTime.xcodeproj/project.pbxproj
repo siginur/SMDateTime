@@ -138,6 +138,7 @@
 				B36C43902163550400B3E889 /* Sources */,
 				B36C43912163550400B3E889 /* Frameworks */,
 				B36C43922163550400B3E889 /* Resources */,
+				B3843339220022E9004545AC /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -219,6 +220,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B3843339220022E9004545AC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\necho \"$(date +%s)\\n${PRODUCT_BUNDLE_IDENTIFIER}\\n${BUILT_PRODUCTS_DIR}/${EXECUTABLE_NAME}\\n${ARCHS}\" > $TMPDIR/fat-lib-path.txt\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B36C43902163550400B3E889 /* Sources */ = {
