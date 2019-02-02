@@ -29,8 +29,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B300F48821FA40A5000B091A /* SMDurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMDurationTests.swift; sourceTree = "<group>"; };
-		B300F48A21FA40A5000B091A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B300F49421FA4451000B091A /* SMDurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMDurationTests.swift; sourceTree = "<group>"; };
 		B342C09E216D50D700282BDC /* SMDateTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMDateTime.swift; sourceTree = "<group>"; };
 		B36C43942163550400B3E889 /* SMDateTime.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SMDateTime.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,21 +62,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B300F48721FA40A5000B091A /* SMDurationTests */ = {
-			isa = PBXGroup;
-			children = (
-				B300F48821FA40A5000B091A /* SMDurationTests.swift */,
-				B300F48A21FA40A5000B091A /* Info.plist */,
-			);
-			path = SMDurationTests;
-			sourceTree = "<group>";
-		};
 		B36C438A2163550400B3E889 = {
 			isa = PBXGroup;
 			children = (
 				B36C43962163550400B3E889 /* SMDateTime */,
 				B36C43A12163550400B3E889 /* SMDateTimeTests */,
-				B300F48721FA40A5000B091A /* SMDurationTests */,
 				B36C43952163550400B3E889 /* Products */,
 			);
 			sourceTree = "<group>";
