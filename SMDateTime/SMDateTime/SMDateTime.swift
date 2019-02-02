@@ -216,6 +216,86 @@ public struct SMDateTime: Codable {
 
 
 
+// MARK: - Mathematic Operations
+
+extension SMDateTime {
+	
+	
+	/**
+	'Minus' mathematic operator.
+	
+	- Parameters:
+	- lhs:	First dateTime
+	- rhs:	Second dateTime
+	
+	- Returns:
+	Duration between two dates
+	*/
+	public static func - (lhs: SMDateTime, rhs: SMDateTime) -> SMDuration {
+		let seconds = lhs.timestamp - rhs.timestamp
+		return SMDuration(totalSeconds: seconds)
+	}
+	
+	
+	/**
+	'Minus' mathematic operator.
+	
+	- Parameters:
+	- lhs:	DateTime
+	- rhs:	Duration
+	
+	- Returns:
+	Date and time before specific duration
+	*/
+	public static func - (lhs: SMDateTime, rhs: SMDuration) -> SMDateTime {
+		let timestamp = lhs.timestamp - rhs.totalSeconds
+		return SMDateTime(timestamp: timestamp)
+	}
+	
+	
+	/**
+	'Plus' mathematic operator.
+	
+	- Parameters:
+	- lhs:	DateTime
+	- rhs:	Duration
+	
+	- Returns:
+	Date and time after specific duration
+	*/
+	public static func + (lhs: SMDateTime, rhs: SMDuration) -> SMDateTime {
+		let timestamp = lhs.timestamp + rhs.totalSeconds
+		return SMDateTime(timestamp: timestamp)
+	}
+	
+	
+	/**
+	'Plus' mathematic operator.
+
+	- Parameters:
+	- lhs:	Source date and time
+	- rhs:	Duration that would be added
+	*/
+	public static func += (lhs: inout SMDateTime, rhs: SMDuration) {
+		lhs = lhs + rhs;
+	}
+
+
+	/**
+	'Minus' mathematic operator.
+
+	- Parameters:
+	- lhs:	Source date and time
+	- rhs:	Duration that would be subtracted
+	*/
+	public static func -= (lhs: inout SMDateTime, rhs: SMDuration) {
+		lhs = lhs - rhs;
+	}
+	
+}
+
+
+
 // MARK: - Equatable & Comparable Protocols
 
 extension SMDateTime: Equatable, Comparable {
