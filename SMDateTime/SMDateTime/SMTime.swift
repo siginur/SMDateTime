@@ -311,7 +311,7 @@ extension SMTime {
 			guard let dateFormat = DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: Locale.current) else {
 				return .hours_24
 			}
-			return dateFormat.index( of: "a") == nil ? .hours_24 : .hours_12
+			return dateFormat.firstIndex( of: "a") == nil ? .hours_24 : .hours_12
 		}()
 	}
 	
