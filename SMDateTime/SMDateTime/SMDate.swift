@@ -10,7 +10,7 @@
 /**
 Date structure
 */
-public struct SMDate: Codable {
+public struct SMDate: Hashable, Codable {
 	
 	// MARK: - Static Members
 	

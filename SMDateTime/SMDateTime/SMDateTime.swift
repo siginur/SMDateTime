@@ -10,7 +10,7 @@
 /**
 DateTime structure
 */
-public struct SMDateTime: Codable {
+public struct SMDateTime: Hashable, Codable {
 	
 	// MARK: - Private Members
 	

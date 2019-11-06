@@ -10,7 +10,7 @@
 /**
 Time structure
 */
-public struct SMTime: Codable {
+public struct SMTime: Hashable, Codable {
 	
 	// MARK: - Static Members
 	

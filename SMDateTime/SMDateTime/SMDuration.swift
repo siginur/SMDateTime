@@ -10,7 +10,7 @@
 /**
 Duration structure
 */
-public struct SMDuration: Codable {
+public struct SMDuration: Hashable, Codable {
 	
 	// MARK: - Enums
 	

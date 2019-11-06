@@ -227,7 +227,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\necho \"$(date +%s)\\n${PRODUCT_BUNDLE_IDENTIFIER}\\n${BUILT_PRODUCTS_DIR}/${EXECUTABLE_NAME}\\n${ARCHS}\" > $TMPDIR/fat-lib-path.txt\n";
+			shellScript = "echo \"$(date +%s)\\n${PRODUCT_BUNDLE_IDENTIFIER}\\n${BUILT_PRODUCTS_DIR}/${EXECUTABLE_NAME}\\n${ARCHS}\" > $TMPDIR/fat-lib-path.txt\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -404,7 +404,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.merkova.SMDateTime;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -432,7 +432,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.merkova.SMDateTime;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
