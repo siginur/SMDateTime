@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 /**
 Duration structure
 */
