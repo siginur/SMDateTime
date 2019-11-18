@@ -19,6 +19,51 @@ class SMDurationTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 	
+	func testStringFormats() {
+		let duration = SMDuration(days: 1, hours: 0, minutes: 12, seconds: 24)
+		XCTAssertEqual(
+			duration.string(format: .colonSeparated(minimalUnit: .second, maximalUnit: .day)),
+			"01:00:12:24"
+		)
+		XCTAssertEqual(
+			duration.string(format: .colonSeparated(minimalUnit: .minute, maximalUnit: .day)),
+			"01:00:12"
+		)
+		XCTAssertEqual(
+			duration.string(format: .colonSeparated(minimalUnit: .second, maximalUnit: .hour)),
+			"00:12:24"
+		)
+		XCTAssertEqual(
+			duration.string(format: .colonSeparated(minimalUnit: .minute, maximalUnit: .hour)),
+			"00:12"
+		)
+		
+		XCTAssertEqual(
+			duration.string(format: .textual(label: .single, includeZeros: true)),
+			"1d 0h 12m 24s"
+		)
+		XCTAssertEqual(
+			duration.string(format: .textual(label: .short, includeZeros: true)),
+			"1 day 0 hours 12 min 24 sec"
+		)
+		XCTAssertEqual(
+			duration.string(format: .textual(label: .full, includeZeros: true)),
+			"1 day 0 hours 12 minutes 24 seconds"
+		)
+		XCTAssertEqual(
+			duration.string(format: .textual(label: .single, includeZeros: false)),
+			"1d 12m 24s"
+		)
+		XCTAssertEqual(
+			duration.string(format: .textual(label: .short, includeZeros: false)),
+			"1 day 12 min 24 sec"
+		)
+		XCTAssertEqual(
+			duration.string(format: .textual(label: .full, includeZeros: false)),
+			"1 day 12 minutes 24 seconds"
+		)
+	}
+	
 	func testRoundBySecondsUnit() {
 		for days in 0...1 {
 			for hours in 0...23 {

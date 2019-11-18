@@ -202,11 +202,18 @@ public struct SMDateTime: Hashable, Codable {
 	Generate readable `String` from members
 	
 	- Parameters:
-	- format:	Date format to represent date
-	- labels:	One or more `StringLabel` that can be used for more readable result
+		- format:	Date format to represent date
+		- labels:	One or more `StringLabel` that can be used for more readable result
 	- Returns: Readable `String` generated from members
 	*/
 	public func string(format: String, labels: SMDate.StringLabel = []) -> String {
+		if labels.contains(.yesturday) && isYesturday {
+			return "Yesturday"
+		} else if labels.contains(.today) && isToday {
+			return "Today"
+		} else if labels.contains(.tomorrow) && isYesturday {
+			return "Tomorrow"
+		}
 		let formatter = DateFormatter()
 		formatter.dateFormat = format
 		return formatter.string(from: date)

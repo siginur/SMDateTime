@@ -162,6 +162,13 @@ public struct SMDate: Hashable, Codable {
 	- Returns: Readable `String` generated from members
 	*/
 	public func string(format: String, labels: StringLabel = []) -> String {
+		if labels.contains(.yesturday) && isYesturday {
+			return "Yesturday"
+		} else if labels.contains(.today) && isToday {
+			return "Today"
+		} else if labels.contains(.tomorrow) && isYesturday {
+			return "Tomorrow"
+		}
 		let formatter = DateFormatter()
 		formatter.dateFormat = format
 		return formatter.string(from: date)

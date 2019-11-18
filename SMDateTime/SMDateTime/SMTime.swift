@@ -177,17 +177,17 @@ public struct SMTime: Hashable, Codable {
 		let hoursStr, suffix: String
 
 		if clock == .hours_24 {
-			hoursStr = SMTime.numberFormatter.string(for: hours) ?? "\(hours)"
+			hoursStr = Self.numberFormatter.string(for: hours) ?? "\(hours)"
 			suffix = ""
 		} else if hours >= 12 {
-			hoursStr = SMTime.numberFormatter.string(for: hours - 12) ?? "\(hours - 12)"
+			hoursStr = Self.numberFormatter.string(for: hours - 12) ?? "\(hours - 12)"
 			suffix = " pm"
 		} else {
-			hoursStr = SMTime.numberFormatter.string(for: hours) ?? "\(hours)"
+			hoursStr = Self.numberFormatter.string(for: hours) ?? "\(hours)"
 			suffix = " am"
 		}
-		let minutesStr = SMTime.numberFormatter.string(for: minutes) ?? "\(minutes)"
-		let secondsStr = SMTime.numberFormatter.string(for: seconds) ?? "\(seconds)"
+		let minutesStr = Self.numberFormatter.string(for: minutes) ?? "\(minutes)"
+		let secondsStr = Self.numberFormatter.string(for: seconds) ?? "\(seconds)"
 
 		return "\(hoursStr):\(minutesStr)" + (includeSeconds ? ":\(secondsStr)" : "") + suffix
 	}

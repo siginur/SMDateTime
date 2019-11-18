@@ -17,15 +17,94 @@ public struct SMDuration: Hashable, Codable {
 	/**
 	Time unit. Describes availables unit of times
 	*/
-	public enum TimeUnit {
+	public enum TimeUnit: Int, Comparable, Equatable {
+		
 		/// Days unit
-		case day
+		case day = 4
 		/// Hours unit
-		case hour
+		case hour = 3
 		/// Minutes unit
-		case minute
+		case minute = 2
 		/// Seconds unit
-		case second
+		case second = 1
+		
+		public static func < (lhs: SMDuration.TimeUnit, rhs: SMDuration.TimeUnit) -> Bool {
+			return lhs.rawValue < rhs.rawValue
+		}
+		
+	}
+	
+	/**
+	Types of formatted string
+	*/
+	public enum StringFormat {
+		
+		/**
+		Types of `TimeUnit` label formats
+		*/
+		public enum LabelType {
+			
+			/// Single characters: d, h, m, s
+			case single
+			/// Short names: day, hour, min, sec
+			case short
+			/// Full described: day, hour, minute, second
+			case full
+			
+			/**
+			Generate `String` based on `TimeUnit` and value
+
+			- Parameters:
+				- unit:		`TimeUnit` of the label
+				- forValue:	Label's value used to generate right suffix
+			- Returns:	`TimeUnit` label string
+			*/
+			func string(unit: TimeUnit, forValue value: Int = 0) -> String {
+				switch unit {
+					case .day:
+						switch self {
+							case .single:
+								return "d"
+							case .short, .full:
+								return value != 1 ? "days" : "day"
+						}
+					case .hour:
+						switch self {
+							case .single:
+								return "h"
+							case .short, .full:
+								return value != 1 ? "hours" : "hour"
+						}
+					case .minute:
+						switch self {
+							case .single:
+								return "m"
+							case .short:
+								return "min"
+							case .full:
+								return value != 1 ? "minutes" : "minute"
+						}
+					case .second:
+						switch self {
+							case .single:
+								return "s"
+							case .short:
+								return "sec"
+							case .full:
+								return value != 1 ? "seconds" : "second"
+						}
+				}
+			}
+		
+		}
+		
+		/// Total value of days, hours, minutes or seconds
+		case totalValue(unit: TimeUnit)
+		/// Colon separated format
+		case colonSeparated(minimalUnit: TimeUnit, maximalUnit: TimeUnit)
+		/// Textual format
+		case textual(label: LabelType, includeZeros: Bool = false)
+		
 	}
 	
 	
@@ -193,10 +272,87 @@ public struct SMDuration: Hashable, Codable {
 	// MARK: - Functions
 	
 	/**
+	Value by `TimeUnit`
+	
+	- Parameters:
+		- unit:	`TimeUnit`
+	- Returns:	Value based on `TimeUnit`
+	*/
+	public func get(_ unit: TimeUnit) -> Int {
+		switch unit {
+			case .day:
+				return days
+			case .hour:
+				return hours
+			case .minute:
+				return minutes
+			case .second:
+				return seconds
+		}
+	}
+	
+	/**
+	Total value by `TimeUnit`
+	
+	- Parameters:
+		- unit:	`TimeUnit`
+	- Returns:	Total value based on `TimeUnit`
+	*/
+	public func getTotal(_ unit: TimeUnit) -> Double {
+		switch unit {
+			case .day:
+				return totalDays
+			case .hour:
+				return totalHours
+			case .minute:
+				return totalMinutes
+			case .second:
+				return Double(totalSeconds)
+		}
+	}
+	
+	/**
+	Generate readable `String` from members and based on specific format
+	
+	- Parameters:
+		- format: `StringFormat` of the result
+	- Returns: Readable `String` generated from members and based on specific format
+	*/
+	public func string(format: StringFormat) -> String {
+		switch format {
+		case .colonSeparated(let minimalUnit, let maximalUnit):
+			let formatter = NumberFormatter()
+			formatter.numberStyle = .decimal
+			formatter.maximumFractionDigits = 0
+			formatter.minimumIntegerDigits = 2
+			return [.day, .hour, .minute, .second]
+				.filter({ $0 >= minimalUnit && $0 <= maximalUnit })
+				.map({ formatter.string(for: get($0)) ?? "\(get($0))" })
+				.joined(separator: ":")
+		case .totalValue(let unit):
+			let formatter = NumberFormatter()
+			formatter.numberStyle = .decimal
+			formatter.maximumFractionDigits = 2
+			formatter.minimumIntegerDigits = 1
+			let value = getTotal(unit)
+			return formatter.string(for: value) ?? "\(value)"
+		case .textual(let label, let includeZeros):
+			return [.day, .hour, .minute, .second]
+				.filter({ includeZeros || get($0) > 0 })
+				.map({ unit in
+					let value = get(unit)
+					let separator = label == .single ? "" : " "
+					return "\(value)\(separator)\(label.string(unit: unit, forValue: value))"
+				})
+				.joined(separator: " ")
+		}
+	}
+	
+	/**
 	Round current duration to specific `unit` and return new value
 	
 	- Parameters:
-	- toUnit:	`TimeUnit` that should be rounded
+		- toUnit:	`TimeUnit` that should be rounded
 	- Returns:	New `SMDuration` created by rounding current duration
 	*/
 	public func rounded(toUnit unit: TimeUnit) -> SMDuration {
@@ -352,13 +508,7 @@ extension SMDuration: Equatable, Comparable {
 extension SMDuration: CustomStringConvertible {
 	
 	public var description: String {
-		var components: [String?] = []
-		components.append(days > 0 ? "\(days)d" : nil)
-		components.append(hours > 0 ? "\(hours)h" : nil)
-		components.append(minutes > 0 ? "\(minutes)m" : nil)
-		components.append(seconds > 0 ? "\(seconds)s" : nil)
-		let notNilComponents = components.compactMap{ $0 }
-		return notNilComponents.count == 0 ? "0s" : notNilComponents.joined(separator: " ")
+		return string(format: .textual(label: .single, includeZeros: false))
 	}
 	
 }
