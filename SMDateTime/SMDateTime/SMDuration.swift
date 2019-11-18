@@ -6,6 +6,8 @@
 //  Copyright © 2018 merkova. All rights reserved.
 //
 
+import Foundation
+
 
 /**
 Duration structure

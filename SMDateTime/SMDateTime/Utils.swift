@@ -6,6 +6,8 @@
 //  Copyright © 2018 merkova. All rights reserved.
 //
 
+import Foundation
+
 internal func devideAndFloor(value: Int, devider: Int) -> Int {
 	return Int(floor(Double(value) / Double(devider)))
 }
