@@ -101,15 +101,25 @@ public struct SMDateTime: Hashable, Codable {
 	}
 	
 	/// `Date` object
-	public var date: Date! {
+	public var calendarDate: Date! {
 		let calendar = Calendar.current
 		let components = DateComponents(calendar: calendar, year: year, month: month, day: day, hour: hours, minute: minutes, second: seconds)
 		return calendar.date(from: components)
 	}
 	
+	/// Copy of `SMTime`
+	public var time: SMTime {
+		return _time
+	}
+	
+	/// Copy of `SMDate`
+	public var date: SMDate {
+		return _date
+	}
+	
 	/// Unix Timestamp in seconds
 	public var timestamp: Int {
-		return Int(date.timeIntervalSince1970)
+		return Int(calendarDate.timeIntervalSince1970)
 	}
 	
 	/// Check if self date is yesturday
@@ -140,6 +150,19 @@ public struct SMDateTime: Hashable, Codable {
 	public init(date: Date) {
 		_date = SMDate(date: date)
 		_time = SMTime(date: date)
+	}
+	
+	/**
+	Constructor.
+	Create `SMDateTime` structure based on `SMDate` and `SMTime` values
+	
+	- Parameters:
+		- date: `SMDate` object
+		- time:	`SMTime` object
+	*/
+	public init(date: SMDate, time: SMTime) {
+		_date = SMDate(timestamp: date.timestamp)
+		_time = SMTime(totalSeconds: time.totalSeconds)
 	}
 	
 	
@@ -217,7 +240,7 @@ public struct SMDateTime: Hashable, Codable {
 		}
 		let formatter = DateFormatter()
 		formatter.dateFormat = format
-		return formatter.string(from: date)
+		return formatter.string(from: calendarDate)
 	}
 	
 }

@@ -66,10 +66,22 @@ public struct SMTime: Hashable, Codable {
 	- Parameter date: Date from where should extract time components
 	*/
 	public init(date: Date) {
-		let calendar = Calendar.current
-		self.hours = calendar.component(.hour, from: date)
-		self.minutes = calendar.component(.minute, from: date)
-		self.seconds = calendar.component(.second, from: date)
+		let calendar	= Calendar.current
+		self.hours		= calendar.component(.hour, from: date)
+		self.minutes	= calendar.component(.minute, from: date)
+		self.seconds	= calendar.component(.second, from: date)
+	}
+
+	/**
+	Constructor.
+	Create `SMTime` object based on extracted `.hour`, `.minute` and `.second` components from the current `Calendar`
+	
+	- Parameter date: Date from where should extract time components
+	*/
+	public init(date: SMDateTime) {
+		self.hours		= date.hours
+		self.minutes	= date.minutes
+		self.seconds	= date.seconds
 	}
 	
 	
@@ -86,9 +98,9 @@ public struct SMTime: Hashable, Codable {
 	- Requires: `seconds >= 0. seconds <= 59`
 	*/
 	public init(hours: Int = 0, minutes: Int = 0, seconds: Int = 0) {
-		self.hours = max(min(hours, 23), 0)
-		self.minutes = max(min(minutes, 59), 0)
-		self.seconds = max(min(seconds, 59), 0)
+		self.hours		= max(min(hours, 23), 0)
+		self.minutes	= max(min(minutes, 59), 0)
+		self.seconds	= max(min(seconds, 59), 0)
 	}
 	
 	
