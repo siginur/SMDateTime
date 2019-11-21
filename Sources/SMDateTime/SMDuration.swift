@@ -489,15 +489,7 @@ extension SMDuration {
 extension SMDuration: Equatable, Comparable {
 	
 	public static func < (lhs: SMDuration, rhs: SMDuration) -> Bool {
-		if lhs.days != rhs.days {
-			return lhs.days < rhs.days
-		} else if lhs.hours != rhs.hours {
-			return lhs.hours < rhs.hours
-		} else if lhs.minutes != rhs.minutes {
-			return lhs.minutes < rhs.minutes
-		} else {
-			return lhs.seconds < rhs.seconds
-		}
+		return lhs.totalSeconds < rhs.totalSeconds
 	}
 	
 }
