@@ -179,7 +179,7 @@ public struct SMDate: Hashable, Codable {
 	/**
 	Date of the next day
 	
-	- Returns: `NSDate` of the next day
+	- Returns: `Date` of the next day
 	*/
 	public func nextDay() -> SMDate {
 		let nextDate = Calendar.current.date(byAdding: .day, value: 1, to: date)!
@@ -190,10 +190,34 @@ public struct SMDate: Hashable, Codable {
 	/**
 	Date of the previous day
 	
-	- Returns: `NSDate` of the previous day
+	- Returns: `Date` of the previous day
 	*/
 	public func prevDay() -> SMDate {
 		let prevDate = Calendar.current.date(byAdding: .day, value: -1, to: date)!
+		return SMDate(date: prevDate)
+	}
+	
+
+	/**
+	Date to be in N months
+	
+	- Parameter count: Number of months to add
+	- Returns: `Date`by adding N months
+	*/
+	public func nextMonth(count: Int = 1) -> SMDate {
+		let nextDate = Calendar.current.date(byAdding: .month, value: count, to: date)!
+		return SMDate(date: nextDate)
+	}
+	
+
+	/**
+	Date that was N months ago
+	
+	- Parameter count: Number of months to substract
+	- Returns: `Date`by subtracting N months
+	*/
+	public func prevMonth(count: Int = 1) -> SMDate {
+		let prevDate = Calendar.current.date(byAdding: .month, value: -count, to: date)!
 		return SMDate(date: prevDate)
 	}
 	
@@ -201,7 +225,7 @@ public struct SMDate: Hashable, Codable {
 	/**
 	Date of the next specific weekday
 	
-	- Returns: `NSDate` of the next weekday
+	- Returns: `Date` of the next weekday
 	*/
 	public func next(_ weekday: Weekday) -> SMDate {
 		let calendar = Calendar.current
@@ -217,7 +241,7 @@ public struct SMDate: Hashable, Codable {
 	/**
 	Date of the previous specific weekday
 	
-	- Returns: `NSDate` of the previous weekday
+	- Returns: `Date` of the previous weekday
 	*/
 	public func prev(_ weekday: Weekday) -> SMDate {
 		let calendar = Calendar.current
