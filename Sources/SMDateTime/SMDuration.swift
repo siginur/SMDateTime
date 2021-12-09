@@ -561,3 +561,15 @@ extension SMDuration: CustomStringConvertible {
 	}
 	
 }
+
+
+
+// MARK: - Identifiable Protocol
+
+extension SMDuration: Identifiable {
+	
+	public var id: Int {
+		return totalSeconds
+	}
+	
+}

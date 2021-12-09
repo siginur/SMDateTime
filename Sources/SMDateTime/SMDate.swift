@@ -408,6 +408,18 @@ extension SMDate: CustomStringConvertible {
 
 
 
+// MARK: - Identifiable Protocol
+
+extension SMDate: Identifiable {
+	
+	public var id: Int {
+		return (year * 100 + month) * 100 + day
+	}
+	
+}
+
+
+
 // MARK: - Formatter Extension
 
 public extension DateFormatter {

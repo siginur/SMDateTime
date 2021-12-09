@@ -413,6 +413,18 @@ extension SMDateTime: CustomStringConvertible {
 
 
 
+// MARK: - Identifiable Protocol
+
+extension SMDateTime: Identifiable {
+	
+	public var id: Int {
+		return timestamp
+	}
+	
+}
+
+
+
 // MARK: - Formatter Extension
 
 public extension DateFormatter {

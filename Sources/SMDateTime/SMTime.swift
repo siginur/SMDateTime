@@ -363,6 +363,18 @@ extension SMTime: CustomStringConvertible {
 
 
 
+// MARK: - Identifiable Protocol
+
+extension SMTime: Identifiable {
+	
+	public var id: Int {
+		return totalSeconds
+	}
+	
+}
+
+
+
 // MARK: - Formatter Extension
 
 public extension DateFormatter {
