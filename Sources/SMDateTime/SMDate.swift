@@ -159,10 +159,11 @@ public struct SMDate: Hashable, Codable {
 	
 	- Parameters:
 		- format:	Date format to represent date
+		- locale:   Locale
 		- labels:	One or more `StringLabel` that can be used for more readable result
 	- Returns: Readable `String` generated from members
 	*/
-	public func string(format: String, labels: StringLabel = []) -> String {
+	public func string(format: String, locale: Locale? = Locale.current, labels: StringLabel = []) -> String {
 		if labels.contains(.yesturday) && isYesturday {
 			return "Yesturday"
 		} else if labels.contains(.today) && isToday {
@@ -172,6 +173,7 @@ public struct SMDate: Hashable, Codable {
 		}
 		let formatter = DateFormatter()
 		formatter.dateFormat = format
+		formatter.locale = locale
 		return formatter.string(from: date)
 	}
 	
@@ -409,16 +411,16 @@ extension SMDate: CustomStringConvertible {
 // MARK: - Formatter Extension
 
 public extension DateFormatter {
-    
-    func string(from date: SMDate) -> String {
-        self.string(from: date.date)
-    }
-    
-    func smDate(from string: String) -> SMDate? {
-        guard let date = self.date(from: string) else {
-            return nil
-        }
-        return SMDate(date: date)
-    }
-    
+	
+	func string(from date: SMDate) -> String {
+		self.string(from: date.date)
+	}
+	
+	func smDate(from string: String) -> SMDate? {
+		guard let date = self.date(from: string) else {
+			return nil
+		}
+		return SMDate(date: date)
+	}
+	
 }

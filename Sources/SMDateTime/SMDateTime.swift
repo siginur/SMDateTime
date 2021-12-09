@@ -227,10 +227,11 @@ public struct SMDateTime: Hashable, Codable {
 	
 	- Parameters:
 		- format:	Date format to represent date
+		- locale:	Locale
 		- labels:	One or more `StringLabel` that can be used for more readable result
 	- Returns: Readable `String` generated from members
 	*/
-	public func string(format: String, labels: SMDate.StringLabel = []) -> String {
+	public func string(format: String, locale: Locale? = Locale.current, labels: SMDate.StringLabel = []) -> String {
 		if labels.contains(.yesturday) && isYesturday {
 			return "Yesturday"
 		} else if labels.contains(.today) && isToday {
@@ -240,6 +241,7 @@ public struct SMDateTime: Hashable, Codable {
 		}
 		let formatter = DateFormatter()
 		formatter.dateFormat = format
+		formatter.locale = locale
 		return formatter.string(from: calendarDate)
 	}
 	
