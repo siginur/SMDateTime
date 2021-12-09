@@ -285,6 +285,46 @@ extension SMDateTime {
 	
 	
 	/**
+	'Minus' mathematic operator.
+
+	- Parameters:
+	- lhs:	Source date and time
+	- rhs:	Duration that would be subtracted
+	*/
+	public static func -= (lhs: inout SMDateTime, rhs: SMDuration) {
+		lhs = lhs - rhs;
+	}
+	
+	
+	/**
+	'Minus' mathematic operator.
+	
+	- Parameters:
+	- lhs:	DateTime
+	- rhs:	Duration in seconds
+	
+	- Returns:
+	 Date and time before given number of seconds
+	*/
+	public static func - (lhs: SMDateTime, rhs: TimeInterval) -> SMDateTime {
+		let timestamp = lhs.timestamp - Int(rhs)
+		return SMDateTime(timestamp: timestamp)
+	}
+	
+	
+	/**
+	'Minus' mathematic operator.
+
+	- Parameters:
+	- lhs:	Source date and time
+	- rhs:	Duration in seconds that would be subtracted
+	*/
+	public static func -= (lhs: inout SMDateTime, rhs: TimeInterval) {
+		lhs = lhs - rhs;
+	}
+	
+	
+	/**
 	'Plus' mathematic operator.
 	
 	- Parameters:
@@ -310,17 +350,33 @@ extension SMDateTime {
 	public static func += (lhs: inout SMDateTime, rhs: SMDuration) {
 		lhs = lhs + rhs;
 	}
-
-
+	
+	
 	/**
-	'Minus' mathematic operator.
+	'Plus' mathematic operator.
+	
+	- Parameters:
+	- lhs:	DateTime
+	- rhs:	Duration in seconds
+	
+	- Returns:
+	Date and time after given number of seconds
+	*/
+	public static func + (lhs: SMDateTime, rhs: TimeInterval) -> SMDateTime {
+		let timestamp = lhs.timestamp + Int(rhs)
+		return SMDateTime(timestamp: timestamp)
+	}
+	
+	
+	/**
+	'Plus' mathematic operator.
 
 	- Parameters:
 	- lhs:	Source date and time
-	- rhs:	Duration that would be subtracted
+	- rhs:	Duration in seconds that would be added
 	*/
-	public static func -= (lhs: inout SMDateTime, rhs: SMDuration) {
-		lhs = lhs - rhs;
+	public static func += (lhs: inout SMDateTime, rhs: TimeInterval) {
+		lhs = lhs + rhs;
 	}
 	
 }

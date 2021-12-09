@@ -410,6 +410,22 @@ extension SMDuration {
 	
 	
 	/**
+	'Plus' mathematic operator.
+	
+	- Parameters:
+		- lhs:	First duration
+		- rhs:	Second duration
+	
+	- Returns:
+		Duration after adding the given number of seconds
+	*/
+	public static func + (lhs: SMDuration, rhs: TimeInterval) -> SMDuration {
+		let seconds = lhs.totalSeconds + Int(rhs)
+		return SMDuration(totalSeconds: seconds)
+	}
+	
+	
+	/**
 	'Minus' mathematic operator.
 	
 	- Parameters:
@@ -421,6 +437,22 @@ extension SMDuration {
 	*/
 	public static func - (lhs: SMDuration, rhs: SMDuration) -> SMDuration {
 		let seconds = lhs.totalSeconds - rhs.totalSeconds
+		return SMDuration(totalSeconds: seconds)
+	}
+	
+	
+	/**
+	'Minus' mathematic operator.
+	
+	- Parameters:
+		- lhs:	First duration
+		- rhs:	Second duration
+	
+	- Returns:
+		Duration after substraction the given number of seconds
+	*/
+	public static func - (lhs: SMDuration, rhs: TimeInterval) -> SMDuration {
+		let seconds = lhs.totalSeconds - Int(rhs)
 		return SMDuration(totalSeconds: seconds)
 	}
 	
@@ -470,6 +502,18 @@ extension SMDuration {
 	
 	
 	/**
+	'Plus' mathematic operator.
+	
+	- Parameters:
+		- lhs:	Source duration
+		- rhs:	Duration that would be added
+	*/
+	public static func += (lhs: inout SMDuration, rhs: TimeInterval) {
+		lhs = lhs + rhs;
+	}
+	
+	
+	/**
 	'Minus' mathematic operator.
 	
 	- Parameters:
@@ -477,6 +521,18 @@ extension SMDuration {
 		- rhs:	Duration that would be subtracted
 	*/
 	public static func -= (lhs: inout SMDuration, rhs: SMDuration) {
+		lhs = lhs - rhs;
+	}
+	
+	
+	/**
+	'Minus' mathematic operator.
+	
+	- Parameters:
+		- lhs:	Source duration
+		- rhs:	Duration in seconds that would be subtracted
+	*/
+	public static func -= (lhs: inout SMDuration, rhs: TimeInterval) {
 		lhs = lhs - rhs;
 	}
 	
