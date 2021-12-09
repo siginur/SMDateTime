@@ -360,3 +360,22 @@ extension SMTime: CustomStringConvertible {
 	}
 	
 }
+
+
+
+// MARK: - Formatter Extension
+
+public extension DateFormatter {
+    
+    func string(from time: SMTime) -> String {
+        self.string(from: SMDateTime(date: SMDate(date: Date(timeIntervalSince1970: 0)), time: time))
+    }
+    
+    func smTime(from string: String) -> SMTime? {
+        guard let date = self.date(from: string) else {
+            return nil
+        }
+        return SMTime(date: date)
+    }
+    
+}

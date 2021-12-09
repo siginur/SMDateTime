@@ -408,3 +408,22 @@ extension SMDateTime: CustomStringConvertible {
 	}
 	
 }
+
+
+
+// MARK: - Formatter Extension
+
+public extension DateFormatter {
+	
+	func string(from date: SMDateTime) -> String {
+		self.string(from: date.calendarDate)
+	}
+	
+	func smDateTime(from string: String) -> SMDateTime? {
+		guard let date = self.date(from: string) else {
+			return nil
+		}
+		return SMDateTime(date: date)
+	}
+	
+}

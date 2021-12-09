@@ -398,9 +398,27 @@ extension SMDate: Equatable, Comparable {
 
 extension SMDate: CustomStringConvertible {
 	
-	
 	public var description: String {
 		return "\(day).\(month).\(year)"
 	}
 	
+}
+
+
+
+// MARK: - Formatter Extension
+
+public extension DateFormatter {
+    
+    func string(from date: SMDate) -> String {
+        self.string(from: date.date)
+    }
+    
+    func smDate(from string: String) -> SMDate? {
+        guard let date = self.date(from: string) else {
+            return nil
+        }
+        return SMDate(date: date)
+    }
+    
 }
