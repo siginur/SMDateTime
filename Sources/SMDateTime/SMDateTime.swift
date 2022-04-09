@@ -137,6 +137,17 @@ public struct SMDateTime: Hashable, Codable {
 		return _date.isTomorrow
 	}
 	
+	/// Check if self date is on this month
+	public var isThisMonth: Bool {
+		let now = SMDateTime.now
+		return self.month == now.month && self.year == now.year
+	}
+	
+	/// Check if self date is on this month
+	public var isThisYear: Bool {
+		return self.year == SMDateTime.now.year
+	}
+	
 	
 	
 	// MARK: - Initializations
@@ -185,7 +196,7 @@ public struct SMDateTime: Hashable, Codable {
 		- year:		Date year.
 		- month:	Date month.
 		- day:		Date day.
-		- hours:	Time hours. `default` is `0`
+		- hours:	Time hours. `default` value is `0`
 		- minutes:	Time minutes. `default` value is `0`
 		- seconds:	Time seconds. `default` value is `0`
 	- Requires: `year >= 0`
@@ -202,16 +213,33 @@ public struct SMDateTime: Hashable, Codable {
 	
 	
 	/**
-	Constructor.
-	Create `SMDateTime` object based on parsed specified string and format
-	
-	- Parameters:
-		- string: Source string that should be parsed by specified `format` in next parameter
-		- format: Format of the date ('DateFormatter')
-	*/
-	public init?(string: String, format: String) {
+	 Constructor.
+	 Create `SMDateTime` object based on parsed specified string and format.
+	 
+	 - Parameters:
+		- string: Source string that should be parsed.
+		- format: Format of the date.
+		- locale: Date locale. `default` value is `.current`
+		- timeZone: Time Zone. `default` value is `.current`
+	 */
+	public init?(string: String, format: Format, locale: Locale? = .current, timeZone: TimeZone? = .current) {
 		let formatter = DateFormatter()
-		formatter.dateFormat = format
+		formatter.dateFormat = format.rawValue
+		formatter.locale = locale
+		formatter.timeZone = timeZone
+		self.init(string: string, formatter: formatter)
+	}
+	 
+	 
+	/**
+	Constructor.
+	Create `SMDateTime` object based on parsed specified string and format.
+	 
+	- Parameters:
+		- string: Source string that should be parsed.
+		- formatter: Date formatter
+	*/
+	public init?(string: String, formatter: DateFormatter) {
 		guard let date = formatter.date(from: string) else {
 			return nil
 		}
@@ -226,12 +254,13 @@ public struct SMDateTime: Hashable, Codable {
 	Generate readable `String` from members
 	
 	- Parameters:
-		- format:	Date format to represent date
-		- locale:	Locale
-		- labels:	One or more `StringLabel` that can be used for more readable result
+		- format:		Date format to represent date
+		- locale:		Locale. `default` value is `.current`
+		- timeZone:	Time Zone. `default` value is `.current`
+		- labels:		One or more `StringLabel` that can be used for more readable result. `default` value is `[]`
 	- Returns: Readable `String` generated from members
 	*/
-	public func string(format: String, locale: Locale? = Locale.current, labels: SMDate.StringLabel = []) -> String {
+    public func string(format: Format, locale: Locale? = .current, timeZone: TimeZone? = .current, labels: SMDate.StringLabel = []) -> String {
 		if labels.contains(.yesturday) && isYesturday {
 			return "Yesturday"
 		} else if labels.contains(.today) && isToday {
@@ -240,11 +269,35 @@ public struct SMDateTime: Hashable, Codable {
 			return "Tomorrow"
 		}
 		let formatter = DateFormatter()
-		formatter.dateFormat = format
+		formatter.dateFormat = format.rawValue
 		formatter.locale = locale
+        formatter.timeZone = timeZone
 		return formatter.string(from: calendarDate)
 	}
 	
+}
+
+
+
+// MARK: - SMDateTime.Format
+
+public extension SMDateTime {
+    
+    struct Format: ExpressibleByStringLiteral {
+        
+        public static let iso8601: SMDateTime.Format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        
+        public let rawValue: String
+        
+        public init(stringLiteral format: String) {
+            self.rawValue = format
+        }
+        
+        public init(_ format: String) {
+            self.init(stringLiteral: format)
+        }
+    }
+    
 }
 
 

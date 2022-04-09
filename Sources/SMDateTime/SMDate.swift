@@ -85,6 +85,17 @@ public struct SMDate: Hashable, Codable {
 		return self == SMDate.tomorrow
 	}
 	
+	/// Check if self date is on this month
+	public var isThisMonth: Bool {
+		let today = SMDate.today
+		return self.month == today.month && self.year == today.year
+	}
+	
+	/// Check if self date is on this month
+	public var isThisYear: Bool {
+		return self.year == SMDate.today.year
+	}
+	
 	
 	
 	// MARK: - Initializations
@@ -138,12 +149,29 @@ public struct SMDate: Hashable, Codable {
 	Create `SMDate` object based on parsed specified string and format
 	
 	- Parameters:
-		- string: Source string that should be parsed by specified `format` in next parameter
-		- format: Format of the date ('DateFormatter')
+		- string: Source string that should be parsed.
+		- format: Format of the date.
+		- locale: Date locale. `default` value is `.current`
+		- timeZone: Time Zone. `default` value is `.current`
+	 */
+	public init?(string: String, format: SMDateTime.Format, locale: Locale? = .current, timeZone: TimeZone? = .current) {
+		 let formatter = DateFormatter()
+		 formatter.dateFormat = format.rawValue
+		 formatter.locale = locale
+		 formatter.timeZone = timeZone
+		 self.init(string: string, formatter: formatter)
+	}
+	
+	
+	/**
+	 Constructor.
+	 Create `SMDate` object based on parsed specified string and format.
+	 
+	 - Parameters:
+	 	- string: Source string that should be parsed.
+	 	- formatter: Date formatter
 	*/
-	public init?(string: String, format: String) {
-		let formatter = DateFormatter()
-		formatter.dateFormat = format
+	public init?(string: String, formatter: DateFormatter) {
 		guard let date = formatter.date(from: string) else {
 			return nil
 		}
@@ -155,15 +183,16 @@ public struct SMDate: Hashable, Codable {
 	// MARK: - Methods
 	
 	/**
-	Generate readable `String` from members
+	 Generate readable `String` from members
 	
-	- Parameters:
-		- format:	Date format to represent date
+	 - Parameters:
+	 	- format:	Date format to represent date
 		- locale:   Locale
-		- labels:	One or more `StringLabel` that can be used for more readable result
-	- Returns: Readable `String` generated from members
-	*/
-	public func string(format: String, locale: Locale? = Locale.current, labels: StringLabel = []) -> String {
+		- timeZone:	Time Zone. `default` value is `.current`
+		- labels:		One or more `StringLabel` that can be used for more readable result. `default` value is `[]`
+	 - Returns: Readable `String` generated from members
+	 */
+	public func string(format: SMDateTime.Format, locale: Locale? = .current, timeZone: TimeZone? = .current, labels: SMDate.StringLabel = []) -> String {
 		if labels.contains(.yesturday) && isYesturday {
 			return "Yesturday"
 		} else if labels.contains(.today) && isToday {
@@ -172,8 +201,9 @@ public struct SMDate: Hashable, Codable {
 			return "Tomorrow"
 		}
 		let formatter = DateFormatter()
-		formatter.dateFormat = format
+		formatter.dateFormat = format.rawValue
 		formatter.locale = locale
+		formatter.timeZone = timeZone
 		return formatter.string(from: date)
 	}
 	
@@ -183,8 +213,8 @@ public struct SMDate: Hashable, Codable {
 	
 	- Returns: `Date` of the next day
 	*/
-	public func nextDay() -> SMDate {
-		let nextDate = Calendar.current.date(byAdding: .day, value: 1, to: date)!
+	public func nextDay(count: Int = 1) -> SMDate {
+		let nextDate = Calendar.current.date(byAdding: .day, value: count, to: date)!
 		return SMDate(date: nextDate)
 	}
 	
@@ -194,8 +224,8 @@ public struct SMDate: Hashable, Codable {
 	
 	- Returns: `Date` of the previous day
 	*/
-	public func prevDay() -> SMDate {
-		let prevDate = Calendar.current.date(byAdding: .day, value: -1, to: date)!
+	public func prevDay(count: Int = 1) -> SMDate {
+		let prevDate = Calendar.current.date(byAdding: .day, value: -count, to: date)!
 		return SMDate(date: prevDate)
 	}
 	
