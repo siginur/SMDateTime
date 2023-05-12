@@ -16,16 +16,24 @@ public struct SMDate: Hashable, Codable {
 	// MARK: - Static Members
 	
 	/// Yesturday date
-	public static var yesturday = SMDate(date: Date(timeIntervalSinceNow: -86400))
+    public static var yesturday: SMDate {
+        SMDate(date: Date(timeIntervalSinceNow: -86400))
+    }
 
 	/// Today date
-	public static var today = SMDate(date: Date())
+    public static var today: SMDate {
+        SMDate(date: Date())
+    }
 	
 	/// Tomorrow date
-	public static var tomorrow = SMDate(date: Date(timeIntervalSinceNow: 86400))
+    public static var tomorrow: SMDate {
+        SMDate(date: Date(timeIntervalSinceNow: 86400))
+    }
 	
 	/// Current weekday
-	public static var weekday = today.weekday
+    public static var weekday: Weekday! {
+        today.weekday
+    }
 
 	
 	
